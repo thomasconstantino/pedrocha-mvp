@@ -1,0 +1,112 @@
+---
+import Base from '../../layouts/Base.astro';
+import { projetos, gastoProjeto, progressoProjeto } from '../../lib/dados';
+import { eur, eur2, m2, dataPT } from '../../lib/formato';
+import { url } from '../../lib/url';
+import type { Projeto } from '../../lib/tipos';
+
+export function getStaticPaths() {
+  return projetos.map((p) => ({ params: { id: p.id }, props: { projeto: p } }));
+}
+
+const { projeto } = Astro.props as { projeto: Projeto };
+const p = projeto;
+const gasto = gastoProjeto(p);
+const pctOrc = Math.min(100, Math.round((gasto / p.orcamento_eur) * 100));
+const pctObra = progressoProjeto(p);
+const restante = p.orcamento_eur - gasto;
+---
+
+<Base titulo={`Centro de Custo · ${p.localidade}`} subtitulo={p.titulo}>
+  <a href={url('/centros-custo')} class="inline-block mb-4 text-sm text-lumo-700 hover:underline">← Todos os centros de custo</a>
+
+  <!-- Cabeçalho do imóvel -->
+  <div class="bg-white rounded-2xl border border-lumo-100 overflow-hidden mb-6">
+    <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr]">
+      <div class="relative h-48 lg:h-full min-h-[180px] bg-lumo-100">
+        <img src={url(p.imagem)} alt={p.titulo} loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-lumo-700 text-lime-300 text-xs font-medium">{p.estado}</span>
+      </div>
+      <div class="p-5 md:p-6">
+        <div class="text-xs text-lumo-500">{p.id} · {p.localidade}, {p.concelho} · {p.tipologia} · {m2(p.area_m2)}</div>
+        <h2 class="text-xl font-bold text-lumo-900 mt-0.5">{p.titulo}</h2>
+        <div class="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="rounded-xl bg-cream border border-lumo-100 p-3">
+            <div class="text-xs text-lumo-500">Orçamento</div>
+            <div class="text-lg font-bold text-lumo-900">{eur(p.orcamento_eur)}</div>
+          </div>
+          <div class="rounded-xl bg-cream border border-lumo-100 p-3">
+            <div class="text-xs text-lumo-500">Custo incorrido</div>
+            <div class="text-lg font-bold text-lumo-700">{eur2(gasto)}</div>
+          </div>
+          <div class="rounded-xl bg-cream border border-lumo-100 p-3">
+            <div class="text-xs text-lumo-500">Disponível</div>
+            <div class="text-lg font-bold text-lumo-900">{eur2(restante)}</div>
+          </div>
+          <div class="rounded-xl bg-cream border border-lumo-100 p-3">
+            <div class="text-xs text-lumo-500">Progresso obra</div>
+            <div class="text-lg font-bold text-lumo-700">{pctObra}%</div>
+          </div>
+        </div>
+        <div class="mt-3">
+          <div class="flex justify-between text-xs text-lumo-600 mb-1">
+            <span>{pctOrc}% do orçamento utilizado</span>
+            <a href={url('/imoveis')} class="text-lumo-700 font-medium hover:underline">ver imóvel & cronograma →</a>
+          </div>
+          <div class="h-2 bg-lumo-100 rounded-full overflow-hidden">
+            <div class="h-full bg-lumo-600 rounded-full" style={`width:${pctOrc}%`}></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Faturas deste imóvel -->
+  <h3 class="text-sm font-semibold uppercase tracking-wide text-lumo-500 mb-3">
+    Faturas de obra ({p.faturas.length})
+  </h3>
+  <div class="bg-white rounded-2xl border border-lumo-100 overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-xs uppercase text-lumo-500 border-b border-lumo-100">
+          <th class="px-5 py-3 font-medium">Fatura</th>
+          <th class="px-5 py-3 font-medium">Fornecedor</th>
+          <th class="px-5 py-3 font-medium">Descrição</th>
+          <th class="px-5 py-3 font-medium">Data</th>
+          <th class="px-5 py-3 font-medium text-right">Total</th>
+          <th class="px-5 py-3 font-medium">Captura</th>
+          <th class="px-5 py-3 font-medium">PDF</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-lumo-50">
+        {p.faturas.map((f) => (
+          <tr class="hover:bg-cream">
+            <td class="px-5 py-3 font-mono text-xs text-lumo-600">{f.id}</td>
+            <td class="px-5 py-3">
+              <div class="text-lumo-900">{f.fornecedor}</div>
+              <div class="text-xs text-lumo-400">NIF {f.nif}</div>
+            </td>
+            <td class="px-5 py-3 text-lumo-700 max-w-xs">{f.descricao}</td>
+            <td class="px-5 py-3 text-lumo-600 whitespace-nowrap">{dataPT(f.data)}</td>
+            <td class="px-5 py-3 text-right font-semibold text-lumo-700 whitespace-nowrap">{eur2(f.total_eur)}</td>
+            <td class="px-5 py-3">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-lime-200 text-lumo-800 text-[11px]">
+                <span>📲</span> via {f.capturado_via}
+              </span>
+            </td>
+            <td class="px-5 py-3">
+              <a href={url(f.ficheiro_pdf)} target="_blank" rel="noopener" class="text-lumo-700 hover:underline text-xs">abrir PDF →</a>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+      <tfoot>
+        <tr class="border-t border-lumo-100 font-semibold text-lumo-900">
+          <td class="px-5 py-3" colspan="4">Total incorrido</td>
+          <td class="px-5 py-3 text-right">{eur2(gasto)}</td>
+          <td colspan="2"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</Base>

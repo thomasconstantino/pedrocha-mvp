@@ -17,6 +17,7 @@ import { url } from '../lib/url';
               <div class="text-xs text-gray-500">{p.id} · Imóvel {p.imovel_id} · {p.localidade}</div>
               <h3 class="text-lg font-bold text-gray-900">{p.nome}</h3>
               <span class="inline-block mt-1 px-2 py-0.5 rounded-full bg-terra-100 text-terra-700 text-xs">{p.estado}</span>
+              <a href={url(`/centros-custo/${p.id}`)} class="inline-block mt-2 text-xs text-lumo-700 font-medium hover:underline">abrir centro de custo deste imóvel →</a>
             </div>
             <div class="text-right">
               <div class="text-xs text-gray-500">Gasto / Orçamento</div>

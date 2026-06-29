@@ -54,7 +54,7 @@ const estadoFase: Record<string, { label: string; dot: string; text: string }> =
               <div class="mt-3">
                 <div class="flex justify-between text-xs text-lumo-600 mb-1">
                   <span>{pctOrc}% do orçamento utilizado</span>
-                  <a href={url('/centros-custo')} class="text-lumo-700 font-medium hover:underline">ver custos & faturas →</a>
+                  <a href={url(`/centros-custo/${p.id}`)} class="text-lumo-700 font-medium hover:underline">ver custos & faturas →</a>
                 </div>
                 <div class="h-2 bg-lumo-100 rounded-full overflow-hidden">
                   <div class="h-full bg-lumo-600 rounded-full" style={`width:${pctOrc}%`}></div>
