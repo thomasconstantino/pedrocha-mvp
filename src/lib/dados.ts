@@ -65,3 +65,35 @@ export function progressoProjeto(p: Projeto): number {
   );
   return Math.round((pts / p.fases.length) * 100);
 }
+
+/** Fase atual: a que está em curso, ou a última concluída. */
+export function faseAtual(p: Projeto): string {
+  const emCurso = p.fases.find((f) => f.estado === 'em_curso');
+  if (emCurso) return emCurso.nome;
+  const concl = p.fases.filter((f) => f.estado === 'concluida');
+  return concl.length ? concl[concl.length - 1].nome : p.fases[0]?.nome ?? '—';
+}
+
+export const conclusaoMedia =
+  totalProjetos === 0
+    ? 0
+    : Math.round(projetos.reduce((s, p) => s + progressoProjeto(p), 0) / totalProjetos);
+
+export const orcamentoUtilizadoPct =
+  orcamentoTotal === 0 ? 0 : Math.round((gastoTotal / orcamentoTotal) * 100);
+
+/** Faturas mais recentes (todas as obras), ordenadas por data desc. */
+export const faturasRecentes = projetos
+  .flatMap((p) => p.faturas.map((fatura) => ({ fatura, projeto: p })))
+  .sort((a, b) => b.fatura.data.localeCompare(a.fatura.data))
+  .slice(0, 5);
+
+/** Anúncios monitorizados por concelho (para a vista de oportunidades). */
+export const imoveisPorConcelho = Object.entries(
+  imoveis.reduce<Record<string, number>>((m, i) => {
+    m[i.concelho] = (m[i.concelho] || 0) + 1;
+    return m;
+  }, {}),
+)
+  .map(([concelho, total]) => ({ concelho, total }))
+  .sort((a, b) => b.total - a.total);

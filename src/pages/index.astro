@@ -3,81 +3,183 @@ import Base from '../layouts/Base.astro';
 import {
   totalProjetos,
   totalAlertas,
-  horasPoupadasSemana,
+  alertas,
   percentagemCaptura,
   faturasCapturadas,
   totalFaturas,
-  valorFaturasCapturado,
-  alertas,
+  orcamentoTotal,
+  gastoTotal,
+  orcamentoUtilizadoPct,
+  conclusaoMedia,
+  projetos,
+  gastoProjeto,
+  progressoProjeto,
+  faseAtual,
+  faturasRecentes,
+  imoveisPorConcelho,
 } from '../lib/dados';
-import { eur, horas } from '../lib/formato';
+import { eur, eur2, m2, dataPT } from '../lib/formato';
 import { url } from '../lib/url';
 
 const kpis = [
-  {
-    label: 'Imóveis em renovação',
-    valor: `${totalProjetos}`,
-    nota: 'projetos ativos · 100% visíveis',
-    cor: 'text-terra-700',
-    href: '/imoveis',
-  },
-  {
-    label: 'Alertas de aquisição',
-    valor: `${totalAlertas}`,
-    nota: 'imóveis que cumprem os critérios',
-    cor: 'text-azul-700',
-    href: '/alertas',
-    id: 'kpi-alertas',
-  },
-  {
-    label: 'Tempo poupado / semana',
-    valor: horas(horasPoupadasSemana),
-    nota: '≥ 5 h devolvidas ao Pedro',
-    cor: 'text-green-700',
-    href: '#tempo',
-  },
-  {
-    label: 'Faturas capturadas',
-    valor: `${percentagemCaptura}%`,
-    nota: `${faturasCapturadas} / ${totalFaturas} faturas · ${eur(valorFaturasCapturado)}`,
-    cor: 'text-terra-700',
-    href: '/centros-custo',
-  },
+  { label: 'Imóveis em renovação', valor: `${totalProjetos}`, nota: 'projetos ativos', cor: 'text-terra-700', href: '/imoveis' },
+  { label: 'Orçamento da carteira', valor: eur(orcamentoTotal), nota: 'orçamento total aprovado', cor: 'text-lumo-900', href: '/imoveis' },
+  { label: 'Custo incorrido', valor: eur(gastoTotal), nota: `${orcamentoUtilizadoPct}% do orçamento`, cor: 'text-terra-700', href: '/centros-custo' },
+  { label: 'Conclusão média', valor: `${conclusaoMedia}%`, nota: 'progresso médio de obra', cor: 'text-lumo-900', href: '/imoveis' },
+  { label: 'Alertas de aquisição', valor: `${totalAlertas}`, nota: 'imóveis que cumprem critérios', cor: 'text-azul-700', href: '/alertas', id: 'kpi-alertas' },
+  { label: 'Faturas capturadas', valor: `${percentagemCaptura}%`, nota: `${faturasCapturadas} / ${totalFaturas} faturas`, cor: 'text-terra-700', href: '/centros-custo' },
 ];
+const disponivel = orcamentoTotal - gastoTotal;
+const maxConcelho = Math.max(...imoveisPorConcelho.map((c) => c.total), 1);
 ---
 
-<Base titulo="Visão Geral" subtitulo="Estado operacional da operação imobiliária PedroCha — Vidigueira / Beja.">
+<Base titulo="Visão Geral" subtitulo="Estado operacional e financeiro da carteira Lumo Properties — Vidigueira / Beja.">
   <!-- KPIs -->
-  <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
     {kpis.map((k) => (
-      <a href={url(k.href)} class="block bg-white rounded-xl border border-terra-100 p-5 hover:shadow-md transition">
-        <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">{k.label}</div>
-        <div id={k.id} class={`text-3xl font-bold mt-2 ${k.cor}`}>{k.valor}</div>
-        <div class="text-xs text-gray-500 mt-2">{k.nota}</div>
+      <a href={url(k.href)} class="block bg-white rounded-xl border border-terra-100 p-4 hover:shadow-md transition">
+        <div class="text-[11px] font-medium text-gray-500 uppercase tracking-wide leading-tight">{k.label}</div>
+        <div id={k.id} class={`text-2xl font-bold mt-2 ${k.cor}`}>{k.valor}</div>
+        <div class="text-[11px] text-gray-500 mt-1">{k.nota}</div>
       </a>
     ))}
   </section>
 
-  <!-- Alertas em destaque -->
+  <!-- Resumo financeiro da carteira -->
+  <section class="bg-white rounded-xl border border-terra-100 p-6 mb-8">
+    <div class="flex items-baseline justify-between flex-wrap gap-2 mb-4">
+      <h2 class="text-lg font-bold text-lumo-900">Resumo financeiro da carteira</h2>
+      <a href={url('/centros-custo')} class="text-sm text-azul-700 hover:underline">Ver centros de custo →</a>
+    </div>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+      <div class="rounded-xl bg-cream border border-lumo-100 p-4">
+        <div class="text-xs text-lumo-500">Orçamento total</div>
+        <div class="text-xl font-bold text-lumo-900 mt-0.5">{eur(orcamentoTotal)}</div>
+      </div>
+      <div class="rounded-xl bg-cream border border-lumo-100 p-4">
+        <div class="text-xs text-lumo-500">Custo incorrido</div>
+        <div class="text-xl font-bold text-terra-700 mt-0.5">{eur2(gastoTotal)}</div>
+      </div>
+      <div class="rounded-xl bg-cream border border-lumo-100 p-4">
+        <div class="text-xs text-lumo-500">Disponível</div>
+        <div class="text-xl font-bold text-lumo-900 mt-0.5">{eur2(disponivel)}</div>
+      </div>
+      <div class="rounded-xl bg-cream border border-lumo-100 p-4">
+        <div class="text-xs text-lumo-500">Faturas capturadas</div>
+        <div class="text-xl font-bold text-lumo-900 mt-0.5">{faturasCapturadas} / {totalFaturas}</div>
+      </div>
+    </div>
+    <div>
+      <div class="flex justify-between text-xs text-lumo-600 mb-1">
+        <span>{orcamentoUtilizadoPct}% do orçamento utilizado</span>
+        <span>{eur2(disponivel)} disponível</span>
+      </div>
+      <div class="h-2.5 bg-lumo-100 rounded-full overflow-hidden">
+        <div class="h-full bg-lumo-600 rounded-full" style={`width:${orcamentoUtilizadoPct}%`}></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projetos em curso -->
+  <section class="mb-8">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-bold text-lumo-900">Projetos em curso</h2>
+      <a href={url('/imoveis')} class="text-sm text-azul-700 hover:underline">Ver todos os imóveis →</a>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      {projetos.map((p) => {
+        const gasto = gastoProjeto(p);
+        const pctObra = progressoProjeto(p);
+        return (
+          <a href={url(`/centros-custo/${p.id}`)} class="block bg-white rounded-2xl border border-terra-100 overflow-hidden hover:shadow-md transition">
+            <div class="relative h-36 bg-lumo-100">
+              <img src={url(p.imagem)} alt={p.titulo} loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+              <span class="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-lumo-700 text-lime-300 text-[10px] font-medium">{pctObra}% concluído</span>
+            </div>
+            <div class="p-4">
+              <div class="text-xs text-lumo-500">{p.localidade}, {p.concelho} · {p.tipologia}</div>
+              <h3 class="font-bold text-lumo-900 leading-tight mt-0.5">{p.titulo}</h3>
+              <div class="text-xs text-lumo-600 mt-1">Fase atual: <span class="font-medium">{faseAtual(p)}</span></div>
+              <div class="mt-3">
+                <div class="flex justify-between text-xs text-lumo-600 mb-1">
+                  <span>{eur2(gasto)}</span>
+                  <span class="text-lumo-400">de {eur(p.orcamento_eur)}</span>
+                </div>
+                <div class="h-1.5 bg-lumo-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-lumo-600 rounded-full" style={`width:${Math.min(100, Math.round((gasto / p.orcamento_eur) * 100))}%`}></div>
+                </div>
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Faturas recentes + Alertas recentes -->
+  <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Faturas recentes -->
+    <div class="bg-white rounded-xl border border-terra-100 p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-lumo-900">Faturas de obra recentes</h2>
+        <a href={url('/centros-custo')} class="text-sm text-azul-700 hover:underline">Ver tudo →</a>
+      </div>
+      <div class="divide-y divide-terra-50">
+        {faturasRecentes.map(({ fatura, projeto }) => (
+          <div class="py-3 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <div class="font-medium text-gray-900 text-sm truncate">{fatura.fornecedor}</div>
+              <div class="text-xs text-gray-500 truncate">{projeto.localidade} · {dataPT(fatura.data)}</div>
+            </div>
+            <div class="text-right shrink-0">
+              <div class="font-bold text-terra-700 text-sm">{eur2(fatura.total_eur)}</div>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-lime-200 text-lumo-800 text-[10px] mt-0.5">📲 {fatura.capturado_via}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Alertas em destaque -->
+    <div class="bg-white rounded-xl border border-terra-100 p-6">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-lumo-900">Alertas de aquisição recentes</h2>
+        <a href={url('/alertas')} class="text-sm text-azul-700 hover:underline">Ver todos (<span id="ver-todos-count">{totalAlertas}</span>) →</a>
+      </div>
+      <div id="destaque-alertas" class="divide-y divide-terra-50">
+        {alertas.slice(0, 5).map((a) => (
+          <div class="py-3 flex items-center justify-between gap-4">
+            <div class="min-w-0">
+              <div class="font-medium text-gray-900 truncate">{a.imovel.titulo}</div>
+              <div class="text-xs text-gray-500">{a.imovel.localidade}, {a.imovel.concelho}</div>
+            </div>
+            <div class="text-right shrink-0">
+              <div class="font-bold text-terra-700">{eur(a.imovel.preco_eur)}</div>
+              <div class="text-xs text-gray-500">{eur(a.imovel.preco_por_m2)}/m²</div>
+            </div>
+          </div>
+        ))}
+        {alertas.length === 0 && <p class="py-3 text-sm text-gray-500">Sem alertas no momento.</p>}
+      </div>
+    </div>
+  </section>
+
+  <!-- Oportunidades por concelho -->
   <section class="bg-white rounded-xl border border-terra-100 p-6">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-lg font-bold text-gray-900">Alertas de aquisição recentes</h2>
-      <a href={url('/alertas')} class="text-sm text-azul-700 hover:underline">Ver todos (<span id="ver-todos-count">{totalAlertas}</span>) →</a>
+      <h2 class="text-lg font-bold text-lumo-900">Anúncios monitorizados por concelho</h2>
+      <a href={url('/alertas')} class="text-sm text-azul-700 hover:underline">Ver alertas →</a>
     </div>
-    <div id="destaque-alertas" class="divide-y divide-terra-50">
-      {alertas.slice(0, 5).map((a) => (
-        <div class="py-3 flex items-center justify-between gap-4">
-          <div class="min-w-0">
-            <div class="font-medium text-gray-900 truncate">{a.imovel.titulo}</div>
-            <div class="text-xs text-gray-500">{a.imovel.localidade}, {a.imovel.concelho}</div>
+    <div class="space-y-3">
+      {imoveisPorConcelho.map((c) => (
+        <div class="flex items-center gap-3">
+          <span class="w-32 shrink-0 text-sm text-lumo-700">{c.concelho}</span>
+          <div class="flex-1 h-5 bg-cream rounded-full overflow-hidden">
+            <div class="h-full bg-lumo-600 rounded-full" style={`width:${Math.round((c.total / maxConcelho) * 100)}%`}></div>
           </div>
-          <div class="text-right shrink-0">
-            <div class="font-bold text-terra-700">{eur(a.imovel.preco_eur)}</div>
-            <div class="text-xs text-gray-500">{eur(a.imovel.preco_por_m2)}/m²</div>
-          </div>
+          <span class="w-8 text-right text-sm font-semibold text-lumo-700">{c.total}</span>
         </div>
       ))}
-      {alertas.length === 0 && <p class="py-3 text-sm text-gray-500">Sem alertas no momento.</p>}
     </div>
   </section>
 </Base>
