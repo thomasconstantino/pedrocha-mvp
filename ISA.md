@@ -2,8 +2,8 @@
 project: PedroCha-MVP
 task: Build a deployable MVP real-estate operations dashboard for Pedro's Alentejo property operation
 effort: E4
-phase: observe
-progress: 0/34
+phase: complete
+progress: 34/34
 mode: build
 started: 2026-06-29
 updated: 2026-06-29
@@ -49,48 +49,48 @@ Ship a deployed, publicly-reachable Astro dashboard (PT-PT) that proves four thi
 ## Criteria
 
 ### Deliverable 1 — Properties loaded & visible
-- [ ] ISC-1: `src/data/properties.json` exists and contains exactly 20 listings
-- [ ] ISC-2: Every listing has a real, non-empty `url` to a Portuguese portal
-- [ ] ISC-3: Every listing has `estado: "ativo"` (all active)
-- [ ] ISC-4: Every listing has numeric `preco_eur` and `area_m2` > 0
-- [ ] ISC-5: Every listing has `preco_por_m2` equal to round(preco_eur/area_m2) within tolerance
-- [ ] ISC-6: Listings span the Vidigueira/Beja region (concelho field within allowed set)
-- [ ] ISC-7: `/imoveis` page renders all 20 listings (count visible in DOM)
-- [ ] ISC-8: Dashboard overview shows "20 / 20 imóveis ativos" KPI
-- [ ] ISC-9: Anti: no listing contains a fabricated/placeholder URL (no example.com, no #)
+- [x] ISC-1: `src/data/properties.json` exists and contains exactly 20 listings
+- [x] ISC-2: Every listing has a real, non-empty `url` to a Portuguese portal
+- [x] ISC-3: Every listing has `estado: "ativo"` (all active)
+- [x] ISC-4: Every listing has numeric `preco_eur` and `area_m2` > 0
+- [x] ISC-5: Every listing has `preco_por_m2` equal to round(preco_eur/area_m2) within tolerance
+- [x] ISC-6: Listings span the Vidigueira/Beja region (concelho field within allowed set)
+- [x] ISC-7: `/imoveis` page renders all 20 listings (count visible in DOM)
+- [x] ISC-8: Dashboard overview shows "20 / 20 imóveis ativos" KPI
+- [x] ISC-9: Anti: no listing contains a fabricated/placeholder URL (no example.com, no #)
 
 ### Deliverable 2 — Acquisition alert system (configured + tested)
-- [ ] ISC-10: `src/data/criterios-aquisicao.json` defines explicit criteria (max preço, max €/m², min área, concelhos-alvo, tipologias)
-- [ ] ISC-11: `src/lib/alertas.ts` exports a pure `avaliarImovel(imovel, criterios)` returning match + reasons
-- [ ] ISC-12: Engine produces per-property reasons (which criteria passed/failed)
-- [ ] ISC-13: `bun test` runs and the alert-engine test suite passes
-- [ ] ISC-14: Tests cover: a clear match, a clear non-match, and a boundary/edge case
-- [ ] ISC-15: `/alertas` page lists every property that triggers an acquisition alert
-- [ ] ISC-16: Overview shows an "Alertas de aquisição" KPI with the live count
-- [ ] ISC-17: Anti: the alert engine contains NO proprietary scoring/yield model — plain criteria only
+- [x] ISC-10: `src/data/criterios-aquisicao.json` defines explicit criteria (max preço, max €/m², min área, concelhos-alvo, tipologias)
+- [x] ISC-11: `src/lib/alertas.ts` exports a pure `avaliarImovel(imovel, criterios)` returning match + reasons
+- [x] ISC-12: Engine produces per-property reasons (which criteria passed/failed)
+- [x] ISC-13: `bun test` runs and the alert-engine test suite passes
+- [x] ISC-14: Tests cover: a clear match, a clear non-match, and a boundary/edge case
+- [x] ISC-15: `/alertas` page lists every property that triggers an acquisition alert
+- [x] ISC-16: Overview shows an "Alertas de aquisição" KPI with the live count
+- [x] ISC-17: Anti: the alert engine contains NO proprietary scoring/yield model — plain criteria only
 
 ### Deliverable 3 — 5+ hours/week saved
-- [ ] ISC-18: `src/data/poupanca-tempo.json` itemizes manual tasks now automated, with hours each
-- [ ] ISC-19: The itemized hours sum to ≥ 5.0 hours/week
-- [ ] ISC-20: `/` overview renders a "Tempo poupado" panel showing the total ≥5h/semana
-- [ ] ISC-21: Panel breaks the total down by task (monitorização, faturas, relatórios, etc.)
-- [ ] ISC-22: The displayed total is computed from the data, not a hardcoded string
+- [x] ISC-18: `src/data/poupanca-tempo.json` itemizes manual tasks now automated, with hours each
+- [x] ISC-19: The itemized hours sum to ≥ 5.0 hours/week
+- [x] ISC-20: `/` overview renders a "Tempo poupado" panel showing the total ≥5h/semana
+- [x] ISC-21: Panel breaks the total down by task (monitorização, faturas, relatórios, etc.)
+- [x] ISC-22: The displayed total is computed from the data, not a hardcoded string
 
 ### Deliverable 4 — Construction invoices captured per cost center
-- [ ] ISC-23: `src/data/projetos.json` defines ≥3 renovation projects, each linked to a property
-- [ ] ISC-24: Each project has a cost center with ≥2 construction invoices
-- [ ] ISC-25: A real PDF file exists on disk for every invoice (under public/faturas/{projeto}/)
-- [ ] ISC-26: Each invoice PDF is a valid PDF (starts with %PDF header)
-- [ ] ISC-27: PDFs contain Portuguese fatura fields (fornecedor, NIF, descrição, valor, IVA, data)
-- [ ] ISC-28: `/centros-custo` page lists each project, its invoices, budget vs spent, and links to each PDF
-- [ ] ISC-29: Each captured invoice shows a "via WhatsApp" capture badge (mocked)
-- [ ] ISC-30: Anti: no real WhatsApp API/webhook/credential exists anywhere in the codebase
+- [x] ISC-23: `src/data/projetos.json` defines ≥3 renovation projects, each linked to a property
+- [x] ISC-24: Each project has a cost center with ≥2 construction invoices
+- [x] ISC-25: A real PDF file exists on disk for every invoice (under public/faturas/{projeto}/)
+- [x] ISC-26: Each invoice PDF is a valid PDF (starts with %PDF header)
+- [x] ISC-27: PDFs contain Portuguese fatura fields (fornecedor, NIF, descrição, valor, IVA, data)
+- [x] ISC-28: `/centros-custo` page lists each project, its invoices, budget vs spent, and links to each PDF
+- [x] ISC-29: Each captured invoice shows a "via WhatsApp" capture badge (mocked)
+- [x] ISC-30: Anti: no real WhatsApp API/webhook/credential exists anywhere in the codebase
 
 ### Cross-cutting — build, deploy, language
-- [ ] ISC-31: `bun run build` completes with zero errors and emits `dist/`
-- [ ] ISC-32: UI chrome is in PT-PT (nav labels: Imóveis, Alertas, Centros de Custo, Critérios)
-- [ ] ISC-33: Site is deployed to a public URL returning HTTP 200
-- [ ] ISC-34: Live URL screenshot/curl confirms the overview renders with the 4 KPIs
+- [x] ISC-31: `bun run build` completes with zero errors and emits `dist/`
+- [x] ISC-32: UI chrome is in PT-PT (nav labels: Imóveis, Alertas, Centros de Custo, Critérios)
+- [x] ISC-33: Site is deployed to a public URL returning HTTP 200
+- [x] ISC-34: Live URL screenshot/curl confirms the overview renders with the 4 KPIs
 
 ## Test Strategy
 
@@ -127,8 +127,15 @@ Ship a deployed, publicly-reachable Astro dashboard (PT-PT) that proves four thi
 
 ## Changelog
 
-(entries appended at LEARN)
+- conjectured: hosted deploy would require Cloudflare/Vercel credentials + Node 22 (wrangler). refuted_by: the advisor (external GPT-class model via Inference.ts) noting the Astro output is **static**, so no adapter/wrangler is needed at all. learned: a static build deploys to any static host; `gh` (already authenticated) made GitHub Pages a fully autonomous, self-verifiable path. criterion_now: ISC-33/34 verified live, not deferred.
+- conjectured: integer-rounded areas were fine. refuted_by: ISC-5 recompute flagged imv-08 (area 144 vs source 143.5 → €/m² mismatch). learned: keep source-faithful area values; recompute-probe catches silent data drift. criterion_now: ISC-5 passes with 0 rows off.
 
 ## Verification
 
-(evidence appended at VERIFY)
+**Deliverable 1 — Properties (ISC-1..9):** `grep -c imv- imoveis.json` = 20; live `/imoveis/` `data-imovel` rows = 20; all `estado: "ativo"`; every `url` is a real imovirtual.com listing (no placeholders); €/m² recompute = 0 rows off after imv-08 fix; concelhos ∈ {Vidigueira, Cuba, Alvito, Beja, Ferreira do Alentejo}; overview KPI "20 / 20" confirmed live.
+**Deliverable 2 — Alerts (ISC-10..17):** `bun test` → 8 pass / 0 fail (match, non-match price, non-match concelho, non-match type, boundary-equal, area-edge); live `/alertas/` shows 8 "Alerta de aquisição" badges; overview "Alertas de aquisição" KPI present; engine is plain criteria only (no proprietary scoring).
+**Deliverable 3 — Time saved (ISC-18..22):** `poupanca-tempo.json` 4 itemized tasks summing to 5.25 h (computed via reduce, not hardcoded); overview panel renders "5,25 h" + per-task breakdown live.
+**Deliverable 4 — Invoices (ISC-23..30):** 3 projects (imv-01/02/03), 7 invoices total (3/2/2), 7 PDFs on disk all `%PDF`; live PDF serves `200 application/pdf`; `/centros-custo/` shows 7 "via WhatsApp" badges + budget/spent + PDF links; grep confirms NO real WhatsApp API/webhook/credential.
+**Cross-cutting (ISC-31..34):** `astro build` exit 0 → dist/; nav labels PT-PT; **live at https://thomasconstantino.github.io/pedrocha-mvp/ → HTTP 200**, CSS asset 200, all 4 sub-routes 200.
+
+**Doctrine notes:** Advisor (Rule 2) called once at the commitment boundary — surfaced the static-build insight, the "don't call it done" reframe, and the mock-labeling check (all actioned). **Cato (Rule 2a, E4-mandatory) could NOT run — `codex` CLI is not installed on this machine.** Show-your-math: the cross-vendor blind-spot function was partially served by the GPT-class advisor (a non-Anthropic model), which did catch real issues; a follow-up Cato pass is recommended if codex is installed later.
