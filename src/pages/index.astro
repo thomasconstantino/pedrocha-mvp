@@ -28,6 +28,7 @@ const kpis = [
     nota: 'imóveis que cumprem os critérios',
     cor: 'text-azul-700',
     href: '/alertas',
+    id: 'kpi-alertas',
   },
   {
     label: 'Tempo poupado / semana',
@@ -52,7 +53,7 @@ const kpis = [
     {kpis.map((k) => (
       <a href={url(k.href)} class="block bg-white rounded-xl border border-terra-100 p-5 hover:shadow-md transition">
         <div class="text-xs font-medium text-gray-500 uppercase tracking-wide">{k.label}</div>
-        <div class={`text-3xl font-bold mt-2 ${k.cor}`}>{k.valor}</div>
+        <div id={k.id} class={`text-3xl font-bold mt-2 ${k.cor}`}>{k.valor}</div>
         <div class="text-xs text-gray-500 mt-2">{k.nota}</div>
       </a>
     ))}
@@ -96,9 +97,9 @@ const kpis = [
   <section class="bg-white rounded-xl border border-terra-100 p-6">
     <div class="flex items-center justify-between mb-4">
       <h2 class="text-lg font-bold text-gray-900">Alertas de aquisição recentes</h2>
-      <a href={url('/alertas')} class="text-sm text-azul-700 hover:underline">Ver todos ({totalAlertas}) →</a>
+      <a href={url('/alertas')} class="text-sm text-azul-700 hover:underline">Ver todos (<span id="ver-todos-count">{totalAlertas}</span>) →</a>
     </div>
-    <div class="divide-y divide-terra-50">
+    <div id="destaque-alertas" class="divide-y divide-terra-50">
       {alertas.slice(0, 5).map((a) => (
         <div class="py-3 flex items-center justify-between gap-4">
           <div class="min-w-0">
@@ -115,3 +116,26 @@ const kpis = [
     </div>
   </section>
 </Base>
+
+<script>
+  import imoveisData from '../data/imoveis.json';
+  import { avaliarTodos } from '../lib/alertas';
+  import { getRegras } from '../lib/criteriosStore';
+  import { renderDestaqueRow } from '../lib/render';
+  import type { Imovel } from '../lib/tipos';
+
+  const imoveis = imoveisData as Imovel[];
+  const alertas = avaliarTodos(imoveis, { regras: getRegras() } as any).filter((a) => a.alerta);
+
+  const kpi = document.getElementById('kpi-alertas');
+  if (kpi) kpi.textContent = String(alertas.length);
+  const verTodos = document.getElementById('ver-todos-count');
+  if (verTodos) verTodos.textContent = String(alertas.length);
+
+  const destaque = document.getElementById('destaque-alertas');
+  if (destaque) {
+    destaque.innerHTML = alertas.length
+      ? alertas.slice(0, 5).map(renderDestaqueRow).join('')
+      : '<p class="py-3 text-sm text-gray-500">Sem alertas no momento.</p>';
+  }
+</script>

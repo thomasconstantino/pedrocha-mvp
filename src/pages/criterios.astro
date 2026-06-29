@@ -1,65 +1,153 @@
 ---
 import Base from '../layouts/Base.astro';
-import { criterios, totalAlertas, totalImoveis } from '../lib/dados';
-import { eur } from '../lib/formato';
-const r = criterios.regras;
+import { criterios, imoveis, totalImoveis } from '../lib/dados';
+import { regrasDefault } from '../lib/criteriosStore';
+const r = regrasDefault;
 
-const campos = [
-  { label: 'Preço máximo', valor: eur(r.preco_max_eur) },
-  { label: 'Preço por m² máximo', valor: `${eur(r.preco_por_m2_max_eur)}/m²` },
-  { label: 'Área mínima', valor: `${r.area_min_m2} m²` },
-];
+// Opções derivadas dos anúncios monitorizados (∪ alvos por defeito)
+const concelhos = Array.from(
+  new Set([...imoveis.map((i) => i.concelho), ...r.concelhos_alvo]),
+).sort();
+const tipos = Array.from(
+  new Set([...imoveis.map((i) => i.tipo), ...r.tipos_alvo, 'Apartamento']),
+).sort();
 ---
 
 <Base titulo="Critérios de Aquisição" subtitulo={criterios.nome}>
-  <p class="text-sm text-gray-600 mb-6 max-w-2xl">{criterios.descricao}</p>
+  <p class="text-sm text-lumo-600 mb-6 max-w-2xl">{criterios.descricao} Edite os critérios abaixo — as alterações são guardadas no seu navegador e recalculam automaticamente os alertas.</p>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="bg-white rounded-xl border border-terra-100 p-6">
-      <h2 class="font-bold text-gray-900 mb-4">Limites numéricos</h2>
-      <dl class="space-y-3">
-        {campos.map((c) => (
-          <div class="flex items-center justify-between border-b border-terra-50 pb-2">
-            <dt class="text-sm text-gray-600">{c.label}</dt>
-            <dd class="font-semibold text-terra-700">{c.valor}</dd>
-          </div>
-        ))}
-      </dl>
+  <form id="form-criterios" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Limites numéricos -->
+    <div class="bg-white rounded-xl border border-lumo-100 p-6">
+      <h2 class="font-bold text-lumo-900 mb-4">Limites numéricos</h2>
+      <div class="space-y-4">
+        <label class="block">
+          <span class="text-sm text-lumo-600">Preço máximo (€)</span>
+          <input id="c-preco" type="number" min="0" step="1000" value={r.preco_max_eur}
+            class="mt-1 w-full rounded-lg border border-lumo-200 px-3 py-2 text-lumo-900 focus:outline-none focus:ring-2 focus:ring-lumo-300" />
+        </label>
+        <label class="block">
+          <span class="text-sm text-lumo-600">Preço por m² máximo (€/m²)</span>
+          <input id="c-ppm2" type="number" min="0" step="10" value={r.preco_por_m2_max_eur}
+            class="mt-1 w-full rounded-lg border border-lumo-200 px-3 py-2 text-lumo-900 focus:outline-none focus:ring-2 focus:ring-lumo-300" />
+        </label>
+        <label class="block">
+          <span class="text-sm text-lumo-600">Área mínima (m²)</span>
+          <input id="c-area" type="number" min="0" step="5" value={r.area_min_m2}
+            class="mt-1 w-full rounded-lg border border-lumo-200 px-3 py-2 text-lumo-900 focus:outline-none focus:ring-2 focus:ring-lumo-300" />
+        </label>
+      </div>
     </div>
 
-    <div class="bg-white rounded-xl border border-terra-100 p-6">
-      <h2 class="font-bold text-gray-900 mb-4">Filtros de elegibilidade</h2>
-      <div class="mb-4">
-        <div class="text-sm text-gray-600 mb-2">Concelhos-alvo</div>
+    <!-- Filtros de elegibilidade -->
+    <div class="bg-white rounded-xl border border-lumo-100 p-6">
+      <h2 class="font-bold text-lumo-900 mb-4">Filtros de elegibilidade</h2>
+      <div class="mb-5">
+        <div class="text-sm text-lumo-600 mb-2">Concelhos-alvo</div>
         <div class="flex flex-wrap gap-2">
-          {r.concelhos_alvo.map((c) => (
-            <span class="px-3 py-1 rounded-full bg-terra-100 text-terra-700 text-xs">{c}</span>
+          {concelhos.map((c) => (
+            <label class="cursor-pointer">
+              <input type="checkbox" name="concelho" value={c} checked={r.concelhos_alvo.includes(c)} class="peer sr-only" />
+              <span class="inline-block px-3 py-1 rounded-full text-xs border border-lumo-200 text-lumo-600 peer-checked:bg-lumo-700 peer-checked:text-lime-300 peer-checked:border-lumo-700 transition">{c}</span>
+            </label>
           ))}
         </div>
       </div>
       <div>
-        <div class="text-sm text-gray-600 mb-2">Tipos-alvo</div>
+        <div class="text-sm text-lumo-600 mb-2">Tipos-alvo</div>
         <div class="flex flex-wrap gap-2">
-          {r.tipos_alvo.map((t) => (
-            <span class="px-3 py-1 rounded-full bg-azul-700/10 text-azul-700 text-xs">{t}</span>
+          {tipos.map((t) => (
+            <label class="cursor-pointer">
+              <input type="checkbox" name="tipo" value={t} checked={r.tipos_alvo.includes(t)} class="peer sr-only" />
+              <span class="inline-block px-3 py-1 rounded-full text-xs border border-lumo-200 text-lumo-600 peer-checked:bg-lumo-700 peer-checked:text-lime-300 peer-checked:border-lumo-700 transition">{t}</span>
+            </label>
           ))}
         </div>
       </div>
     </div>
-  </div>
+  </form>
 
-  <div class="mt-6 bg-white rounded-xl border border-terra-100 p-6">
+  <!-- Pré-visualização + ações -->
+  <div class="mt-6 bg-white rounded-xl border border-lumo-100 p-6">
     <div class="flex items-center justify-between flex-wrap gap-4">
       <div>
-        <h2 class="font-bold text-gray-900">Resultado dos critérios</h2>
-        <p class="text-sm text-gray-500">Aplicados a {totalImoveis} anúncios monitorizados na região (oportunidades de aquisição).</p>
+        <h2 class="font-bold text-lumo-900">Resultado em tempo real</h2>
+        <p class="text-sm text-lumo-500">Critérios aplicados a {totalImoveis} anúncios monitorizados na região.</p>
+        <p id="estado-criterios" class="text-xs text-lumo-400 mt-1"></p>
       </div>
       <div class="text-right">
-        <div class="text-3xl font-bold text-azul-700">{totalAlertas}</div>
-        <div class="text-xs text-gray-500">alertas gerados</div>
+        <div id="preview-count" class="text-3xl font-bold text-lumo-700">—</div>
+        <div class="text-xs text-lumo-500">alertas gerados</div>
       </div>
     </div>
-    <p class="text-xs text-gray-400 mt-4">{criterios.notas}</p>
-    <p class="text-xs text-gray-400 mt-1">Atualizado em {criterios.atualizado}. O motor de alertas é testado automaticamente (bun test).</p>
+    <div class="mt-5 flex flex-wrap gap-3 items-center">
+      <button id="btn-guardar" type="button" class="px-4 py-2 rounded-lg bg-lumo-700 text-lime-300 text-sm font-medium hover:bg-lumo-800 transition">Guardar critérios</button>
+      <button id="btn-repor" type="button" class="px-4 py-2 rounded-lg border border-lumo-200 text-lumo-700 text-sm font-medium hover:bg-cream transition">Repor predefinições</button>
+      <a href={import.meta.env.BASE_URL.replace(/\/$/, '') + '/alertas'} class="text-sm text-lumo-700 hover:underline ml-auto">Ver alertas →</a>
+      <span id="msg-guardado" class="text-sm text-lumo-600 opacity-0 transition-opacity">✓ Critérios guardados</span>
+    </div>
   </div>
 </Base>
+
+<script>
+  import imoveisData from '../data/imoveis.json';
+  import { avaliarTodos } from '../lib/alertas';
+  import { getRegras, setRegras, resetRegras, regrasDefault, isPersonalizado } from '../lib/criteriosStore';
+  import type { Imovel, CriteriosRegras } from '../lib/tipos';
+
+  const imoveis = imoveisData as Imovel[];
+  const $ = (id: string) => document.getElementById(id) as HTMLElement;
+  const preco = $('c-preco') as HTMLInputElement;
+  const ppm2 = $('c-ppm2') as HTMLInputElement;
+  const area = $('c-area') as HTMLInputElement;
+  const checks = (name: string) =>
+    Array.from(document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]`));
+
+  function readForm(): CriteriosRegras {
+    return {
+      preco_max_eur: Number(preco.value) || 0,
+      preco_por_m2_max_eur: Number(ppm2.value) || 0,
+      area_min_m2: Number(area.value) || 0,
+      concelhos_alvo: checks('concelho').filter((c) => c.checked).map((c) => c.value),
+      tipos_alvo: checks('tipo').filter((c) => c.checked).map((c) => c.value),
+    };
+  }
+
+  function populate(r: CriteriosRegras) {
+    preco.value = String(r.preco_max_eur);
+    ppm2.value = String(r.preco_por_m2_max_eur);
+    area.value = String(r.area_min_m2);
+    checks('concelho').forEach((c) => (c.checked = r.concelhos_alvo.includes(c.value)));
+    checks('tipo').forEach((c) => (c.checked = r.tipos_alvo.includes(c.value)));
+  }
+
+  function refresh() {
+    const regras = readForm();
+    const n = avaliarTodos(imoveis, { regras } as any).filter((a) => a.alerta).length;
+    $('preview-count').textContent = String(n);
+    $('estado-criterios').textContent = isPersonalizado()
+      ? 'A usar critérios personalizados (guardados neste navegador).'
+      : 'A usar critérios predefinidos.';
+  }
+
+  // init
+  populate(getRegras());
+  refresh();
+
+  [preco, ppm2, area].forEach((el) => el.addEventListener('input', refresh));
+  checks('concelho').concat(checks('tipo')).forEach((el) => el.addEventListener('change', refresh));
+
+  $('btn-guardar').addEventListener('click', () => {
+    setRegras(readForm());
+    const msg = $('msg-guardado');
+    msg.style.opacity = '1';
+    setTimeout(() => (msg.style.opacity = '0'), 1800);
+    refresh();
+  });
+
+  $('btn-repor').addEventListener('click', () => {
+    resetRegras();
+    populate(regrasDefault);
+    refresh();
+  });
+</script>
