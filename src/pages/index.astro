@@ -1,8 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import {
-  totalAtivos,
-  totalImoveis,
+  totalProjetos,
   totalAlertas,
   horasPoupadasSemana,
   poupanca,
@@ -17,9 +16,9 @@ import { url } from '../lib/url';
 
 const kpis = [
   {
-    label: 'Imóveis ativos',
-    valor: `${totalAtivos} / ${totalImoveis}`,
-    nota: '100% do portfólio ativo carregado',
+    label: 'Imóveis em renovação',
+    valor: `${totalProjetos}`,
+    nota: 'projetos ativos · 100% visíveis',
     cor: 'text-terra-700',
     href: '/imoveis',
   },

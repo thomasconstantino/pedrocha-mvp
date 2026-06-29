@@ -1,13 +1,27 @@
 {
-  "descricao": "Projetos de reabilitação ativos e respetivos centros de custo. Cada fatura de obra é capturada automaticamente (demonstração) a partir do WhatsApp e arquivada no centro de custo do projeto.",
+  "descricao": "Imóveis em renovação (projetos ativos) e respetivos centros de custo. Cada projeto tem orçamento, custo já incorrido, fotografia e cronograma de fases. As faturas de obra são capturadas automaticamente (demonstração) a partir do WhatsApp.",
   "projetos": [
     {
       "id": "PRJ-01",
-      "nome": "Reabilitação Moradia Cuba (centro da vila)",
+      "nome": "Reabilitação Moradia Cuba",
       "imovel_id": "imv-01",
+      "titulo": "Moradia T5 — centro da vila de Cuba",
+      "tipologia": "T5",
+      "area_m2": 253,
       "localidade": "Cuba",
+      "concelho": "Cuba",
+      "imagem": "/projetos/imv-01.jpg",
       "estado": "Obra em curso",
       "orcamento_eur": 78000,
+      "fases": [
+        { "nome": "Aquisição & Escritura", "estado": "concluida", "data": "2026-01-20" },
+        { "nome": "Projeto & Licenciamento", "estado": "concluida", "data": "2026-02-15" },
+        { "nome": "Demolição & remoção de entulho", "estado": "concluida", "data": "2026-03-04" },
+        { "nome": "Estrutura & Cobertura", "estado": "em_curso", "data": "2026-03-21" },
+        { "nome": "Redes (água, luz, esgotos)", "estado": "planeada" },
+        { "nome": "Acabamentos & Pintura", "estado": "planeada" },
+        { "nome": "Inspeção final & Conclusão", "estado": "planeada" }
+      ],
       "faturas": [
         {
           "id": "FT-2026-0142",
@@ -54,9 +68,22 @@
       "id": "PRJ-02",
       "nome": "Recuperação Moradia Alvito",
       "imovel_id": "imv-02",
+      "titulo": "Moradia para recuperar — Alvito",
+      "tipologia": "Moradia",
+      "area_m2": 108,
       "localidade": "Alvito",
+      "concelho": "Alvito",
+      "imagem": "/projetos/imv-02.jpg",
       "estado": "Obra em curso",
       "orcamento_eur": 52000,
+      "fases": [
+        { "nome": "Aquisição & Escritura", "estado": "concluida", "data": "2026-02-10" },
+        { "nome": "Projeto & Licenciamento", "estado": "concluida", "data": "2026-03-12" },
+        { "nome": "Demolição & remoção de entulho", "estado": "concluida", "data": "2026-03-28" },
+        { "nome": "Redes (água, luz, esgotos)", "estado": "em_curso", "data": "2026-05-06" },
+        { "nome": "Acabamentos & Pintura", "estado": "planeada" },
+        { "nome": "Inspeção final & Conclusão", "estado": "planeada" }
+      ],
       "faturas": [
         {
           "id": "FT-2026-0205",
@@ -90,9 +117,21 @@
       "id": "PRJ-03",
       "nome": "Casa Tradicional Vila Nova da Baronia",
       "imovel_id": "imv-03",
+      "titulo": "Casa tradicional alentejana — Vila Nova da Baronia",
+      "tipologia": "T1",
+      "area_m2": 52,
       "localidade": "Vila Nova da Baronia",
+      "concelho": "Alvito",
+      "imagem": "/projetos/imv-03.jpg",
       "estado": "Obra em curso",
       "orcamento_eur": 41000,
+      "fases": [
+        { "nome": "Aquisição & Escritura", "estado": "concluida", "data": "2026-02-25" },
+        { "nome": "Projeto & Licenciamento", "estado": "concluida", "data": "2026-04-02" },
+        { "nome": "Estrutura & Reboco", "estado": "concluida", "data": "2026-05-19" },
+        { "nome": "Acabamentos & Pintura", "estado": "em_curso", "data": "2026-06-10" },
+        { "nome": "Inspeção final & Conclusão", "estado": "planeada" }
+      ],
       "faturas": [
         {
           "id": "FT-2026-0260",

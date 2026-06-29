@@ -50,3 +50,18 @@ export const percentagemCaptura =
 export function gastoProjeto(p: Projeto): number {
   return p.faturas.reduce((s, f) => s + f.total_eur, 0);
 }
+
+// --- Projetos (imóveis em renovação) ---
+export const totalProjetos = projetos.length;
+export const orcamentoTotal = projetos.reduce((s, p) => s + p.orcamento_eur, 0);
+export const gastoTotal = projetos.reduce((s, p) => s + gastoProjeto(p), 0);
+
+/** Progresso do projeto pelas fases: concluída = 1, em curso = 0.5, planeada = 0. */
+export function progressoProjeto(p: Projeto): number {
+  if (p.fases.length === 0) return 0;
+  const pts = p.fases.reduce(
+    (s, f) => s + (f.estado === 'concluida' ? 1 : f.estado === 'em_curso' ? 0.5 : 0),
+    0,
+  );
+  return Math.round((pts / p.fases.length) * 100);
+}

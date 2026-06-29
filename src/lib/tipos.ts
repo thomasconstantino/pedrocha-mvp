@@ -60,12 +60,27 @@ export interface Fatura {
   capturado_em: string;
 }
 
+export type EstadoFase = 'concluida' | 'em_curso' | 'planeada';
+
+export interface Fase {
+  nome: string;
+  estado: EstadoFase;
+  data?: string;
+  descricao?: string;
+}
+
 export interface Projeto {
   id: string;
   nome: string;
   imovel_id: string;
+  titulo: string;
+  tipologia: string;
+  area_m2: number;
   localidade: string;
+  concelho: string;
+  imagem: string;
   estado: string;
   orcamento_eur: number;
+  fases: Fase[];
   faturas: Fatura[];
 }

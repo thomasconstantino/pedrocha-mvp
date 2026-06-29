@@ -1,54 +1,95 @@
 ---
 import Base from '../layouts/Base.astro';
-import { avaliacoes, totalAtivos, totalImoveis } from '../lib/dados';
-import { eur, m2 } from '../lib/formato';
+import { projetos, gastoProjeto, progressoProjeto, totalProjetos } from '../lib/dados';
+import { eur, eur2, m2, dataPT } from '../lib/formato';
+import { url } from '../lib/url';
+
+const estadoFase: Record<string, { label: string; dot: string; text: string }> = {
+  concluida: { label: 'Concluída', dot: 'bg-lumo-600', text: 'text-lumo-700' },
+  em_curso: { label: 'Em curso', dot: 'bg-lime-400 ring-4 ring-lime-200', text: 'text-lumo-800 font-semibold' },
+  planeada: { label: 'Planeada', dot: 'bg-lumo-200', text: 'text-lumo-400' },
+};
 ---
 
-<Base titulo="Imóveis" subtitulo={`${totalAtivos} / ${totalImoveis} imóveis ativos · região Vidigueira / Beja`}>
-  <div class="mb-4 text-sm text-gray-600">
-    Todos os imóveis ativos da operação, carregados de anúncios reais. Os assinalados com
-    <span class="inline-block align-middle mx-1 px-2 py-0.5 rounded-full bg-azul-700 text-white text-xs">Alerta</span>
-    cumprem os critérios de aquisição.
-  </div>
+<Base titulo="Imóveis em Renovação" subtitulo={`${totalProjetos} projetos ativos · cada casa com orçamento, custo incorrido e cronograma de obra`}>
+  <div class="space-y-8">
+    {projetos.map((p) => {
+      const gasto = gastoProjeto(p);
+      const pctOrc = Math.min(100, Math.round((gasto / p.orcamento_eur) * 100));
+      const pctObra = progressoProjeto(p);
+      return (
+        <article class="bg-white rounded-2xl border border-lumo-100 overflow-hidden">
+          <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr]">
+            <!-- Foto da casa -->
+            <div class="relative h-56 lg:h-full min-h-[200px] bg-lumo-100">
+              <img src={url(p.imagem)} alt={p.titulo} loading="lazy" class="absolute inset-0 w-full h-full object-cover" />
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-lumo-700 text-lime-300 text-xs font-medium">{p.estado}</span>
+            </div>
 
-  <div class="overflow-x-auto bg-white rounded-xl border border-terra-100">
-    <table class="w-full text-sm">
-      <thead>
-        <tr class="text-left text-xs uppercase text-gray-500 border-b border-terra-100">
-          <th class="px-4 py-3 font-medium">Imóvel</th>
-          <th class="px-4 py-3 font-medium">Concelho</th>
-          <th class="px-4 py-3 font-medium">Tipo</th>
-          <th class="px-4 py-3 font-medium text-right">Área</th>
-          <th class="px-4 py-3 font-medium text-right">Preço</th>
-          <th class="px-4 py-3 font-medium text-right">€/m²</th>
-          <th class="px-4 py-3 font-medium">Estado</th>
-          <th class="px-4 py-3 font-medium">Fonte</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-terra-50">
-        {avaliacoes.map((a) => (
-          <tr class="hover:bg-terra-50/50" data-imovel={a.imovel.id}>
-            <td class="px-4 py-3">
-              <div class="font-medium text-gray-900 flex items-center gap-2">
-                <span>{a.imovel.titulo}</span>
-                {a.alerta && <span class="shrink-0 px-2 py-0.5 rounded-full bg-azul-700 text-white text-[10px]">Alerta</span>}
+            <!-- Detalhe -->
+            <div class="p-5 md:p-6">
+              <div class="flex items-start justify-between gap-4 flex-wrap">
+                <div>
+                  <div class="text-xs text-lumo-500">{p.id} · {p.localidade}, {p.concelho}</div>
+                  <h2 class="text-xl font-bold text-lumo-900 mt-0.5">{p.titulo}</h2>
+                  <div class="text-sm text-lumo-600 mt-0.5">{p.tipologia} · {m2(p.area_m2)}</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-3xl font-bold text-lumo-700">{pctObra}%</div>
+                  <div class="text-xs text-lumo-500">progresso da obra</div>
+                </div>
               </div>
-              <div class="text-xs text-gray-500">{a.imovel.localidade}</div>
-            </td>
-            <td class="px-4 py-3 text-gray-700">{a.imovel.concelho}</td>
-            <td class="px-4 py-3 text-gray-700">{a.imovel.tipologia}</td>
-            <td class="px-4 py-3 text-right text-gray-700">{m2(a.imovel.area_m2)}</td>
-            <td class="px-4 py-3 text-right font-semibold text-terra-700">{eur(a.imovel.preco_eur)}</td>
-            <td class="px-4 py-3 text-right text-gray-700">{eur(a.imovel.preco_por_m2)}</td>
-            <td class="px-4 py-3">
-              <span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs capitalize">{a.imovel.estado}</span>
-            </td>
-            <td class="px-4 py-3">
-              <a href={a.imovel.url} target="_blank" rel="noopener" class="text-azul-700 hover:underline text-xs">ver anúncio →</a>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+
+              <!-- Orçamento vs custo -->
+              <div class="mt-5 grid grid-cols-2 gap-4">
+                <div class="rounded-xl bg-cream border border-lumo-100 p-4">
+                  <div class="text-xs text-lumo-500">Orçamento</div>
+                  <div class="text-xl font-bold text-lumo-900 mt-0.5">{eur(p.orcamento_eur)}</div>
+                </div>
+                <div class="rounded-xl bg-cream border border-lumo-100 p-4">
+                  <div class="text-xs text-lumo-500">Custo já incorrido</div>
+                  <div class="text-xl font-bold text-lumo-700 mt-0.5">{eur2(gasto)}</div>
+                </div>
+              </div>
+              <div class="mt-3">
+                <div class="flex justify-between text-xs text-lumo-600 mb-1">
+                  <span>{pctOrc}% do orçamento utilizado</span>
+                  <a href={url('/centros-custo')} class="text-lumo-700 font-medium hover:underline">ver custos & faturas →</a>
+                </div>
+                <div class="h-2 bg-lumo-100 rounded-full overflow-hidden">
+                  <div class="h-full bg-lumo-600 rounded-full" style={`width:${pctOrc}%`}></div>
+                </div>
+              </div>
+
+              <!-- Cronograma / fases -->
+              <div class="mt-6">
+                <div class="text-xs font-semibold uppercase tracking-wide text-lumo-500 mb-3">Cronograma da obra</div>
+                <ol class="relative border-l-2 border-lumo-100 ml-1.5 space-y-4">
+                  {p.fases.map((f) => {
+                    const s = estadoFase[f.estado];
+                    return (
+                      <li class="ml-5">
+                        <span class={`absolute -left-[7px] mt-1 w-3 h-3 rounded-full ${s.dot}`}></span>
+                        <div class="flex items-center justify-between gap-3 flex-wrap">
+                          <span class={`text-sm ${s.text}`}>{f.nome}</span>
+                          <span class="flex items-center gap-2 text-xs text-lumo-500">
+                            {f.data && <span>{dataPT(f.data)}</span>}
+                            <span class={`px-2 py-0.5 rounded-full text-[11px] ${
+                              f.estado === 'concluida' ? 'bg-lime-200 text-lumo-800'
+                              : f.estado === 'em_curso' ? 'bg-lime-300 text-lumo-800'
+                              : 'bg-lumo-50 text-lumo-400'
+                            }`}>{s.label}</span>
+                          </span>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            </div>
+          </div>
+        </article>
+      );
+    })}
   </div>
 </Base>
