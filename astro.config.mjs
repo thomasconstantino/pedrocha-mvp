@@ -1,10 +1,8 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 
-// Static output — deployed to GitHub Pages (project site lives under /pedrocha-mvp).
-// To host at a domain root instead (Cloudflare Pages, Vercel, Netlify), remove `base`.
+// Static output — deployed to Vercel (served at domain root, no base path).
 export default defineConfig({
-  site: 'https://thomasconstantino.github.io',
-  base: '/pedrocha-mvp',
+  site: 'https://pedrocha-mvp.vercel.app',
   integrations: [tailwind()],
 });
