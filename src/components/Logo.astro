@@ -1,0 +1,38 @@
+---
+// LUMO Properties logo — faithful SVG recreation of the brand logomark
+// (house + 4-point "Estrela Polar" star → "Casa + Luz = Lumo").
+// Swap in the official asset at public/lumo-logo.svg if available.
+interface Props {
+  variant?: 'full' | 'mark';
+  markColor?: string;   // colour of the house silhouette
+  textColor?: string;   // colour of "Lumo"
+  subColor?: string;    // colour of "Properties"
+  class?: string;
+  size?: number;        // mark height in px
+}
+const {
+  variant = 'full',
+  markColor = '#004238',
+  textColor = '#004238',
+  subColor = '#0a5a48',
+  size = 34,
+  class: cls = '',
+} = Astro.props;
+
+// House silhouette with the 4-point star knocked out (fill-rule evenodd).
+const MARK_PATH =
+  'M50,8 Q52,8 53.5,9.5 L87,42 Q90,45 90,49 L90,86 Q90,90 86,90 L14,90 Q10,90 10,86 L10,49 Q10,45 13,42 L46.5,9.5 Q48,8 50,8 Z ' +
+  'M50,21 Q57,43 79,50 Q57,57 50,79 Q43,57 21,50 Q43,43 50,21 Z';
+---
+
+<span class={`inline-flex items-center gap-2.5 ${cls}`}>
+  <svg height={size} viewBox="0 0 100 100" fill="none" aria-hidden="true" role="img">
+    <path d={MARK_PATH} fill={markColor} fill-rule="evenodd" />
+  </svg>
+  {variant === 'full' && (
+    <span class="flex flex-col leading-none">
+      <span class="text-[1.35rem] font-bold tracking-tight" style={`color:${textColor}`}>Lumo</span>
+      <span class="text-[0.6rem] font-semibold tracking-[0.18em] uppercase mt-0.5" style={`color:${subColor}`}>Properties</span>
+    </span>
+  )}
+</span>

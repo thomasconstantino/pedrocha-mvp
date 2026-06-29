@@ -31,9 +31,16 @@ async function gerarFatura(projeto: any, fatura: any): Promise<string> {
   const page = doc.addPage([595, 842]); // A4
   const font = await doc.embedFont(StandardFonts.Helvetica);
   const bold = await doc.embedFont(StandardFonts.HelveticaBold);
-  const terra = rgb(0.77, 0.42, 0.25);
-  const dark = rgb(0.13, 0.13, 0.13);
+  // LUMO Properties brand colours
+  const terra = rgb(0, 0.259, 0.22); // Channel Marker Green #004238 (accent in document)
+  const lime = rgb(0.859, 0.941, 0.565); // Pale Lime #DBF090
+  const dark = rgb(0, 0.11, 0.094); // Dark Teal #001C18
   const grey = rgb(0.45, 0.45, 0.45);
+
+  // Brand logomark (house + star) in the header
+  const MARK =
+    'M50,8 Q52,8 53.5,9.5 L87,42 Q90,45 90,49 L90,86 Q90,90 86,90 L14,90 Q10,90 10,86 L10,49 Q10,45 13,42 L46.5,9.5 Q48,8 50,8 Z ' +
+    'M50,21 Q57,43 79,50 Q57,57 50,79 Q43,57 21,50 Q43,43 50,21 Z';
 
   const text = (
     s: string,
@@ -44,10 +51,12 @@ async function gerarFatura(projeto: any, fatura: any): Promise<string> {
     color = dark,
   ) => page.drawText(s, { x, y, size, font: f, color });
 
-  // Cabeçalho
+  // Cabeçalho (faixa verde LUMO + logomark)
   page.drawRectangle({ x: 0, y: 792, width: 595, height: 50, color: terra });
-  text('FATURA', 40, 808, 20, bold, rgb(1, 1, 1));
-  text(fatura.id, 460, 808, 12, bold, rgb(1, 1, 1));
+  page.drawSvgPath(MARK, { x: 42, y: 831, scale: 0.34, color: lime });
+  text('Lumo Properties', 84, 818, 14, bold, lime);
+  text('FATURA', 84, 802, 9, bold, rgb(1, 1, 1));
+  text(fatura.id, 470, 812, 12, bold, rgb(1, 1, 1));
 
   // Fornecedor
   let y = 750;
@@ -57,7 +66,7 @@ async function gerarFatura(projeto: any, fatura: any): Promise<string> {
 
   // Cliente
   text('CLIENTE', 360, y, 8, bold, grey);
-  text('PedroCha — Operação Imobiliária', 360, y - 16, 11, bold);
+  text('Lumo Properties', 360, y - 16, 11, bold);
   text('Vidigueira, Beja, Portugal', 360, y - 32, 10, font, grey);
   text('NIF: 245 678 901', 360, y - 46, 10, font, grey);
 
@@ -101,7 +110,7 @@ async function gerarFatura(projeto: any, fatura: any): Promise<string> {
     font,
     grey,
   );
-  text('PedroCha MVP · Centro de custo de obra', 40, 46, 8, font, grey);
+  text('Lumo Properties · Centro de custo de obra', 40, 46, 8, font, grey);
 
   const bytes = await doc.save();
   const rel = fatura.ficheiro_pdf.replace(/^\//, ''); // faturas/PRJ-01/FT-...pdf

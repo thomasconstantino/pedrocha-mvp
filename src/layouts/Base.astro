@@ -1,4 +1,5 @@
 ---
+import Logo from '../components/Logo.astro';
 interface Props {
   titulo: string;
   subtitulo?: string;
@@ -24,18 +25,22 @@ const isActive = (href: string) => {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="preconnect" href="https://rsms.me/" />
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-    <title>{titulo} · PedroCha</title>
-    <meta name="description" content="Dashboard operacional da operação imobiliária PedroCha — Vidigueira / Beja." />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{titulo} · Lumo Properties</title>
+    <meta name="description" content="Dashboard operacional da Lumo Properties — operação imobiliária na região Vidigueira / Beja." />
   </head>
-  <body class="min-h-screen bg-terra-50 text-gray-900 font-sans antialiased">
+  <body class="min-h-screen bg-cream text-ink font-sans antialiased">
     <div class="flex min-h-screen">
       <!-- Sidebar -->
-      <aside class="hidden md:flex w-64 flex-col bg-white border-r border-terra-100">
-        <a href={url('/')} class="block px-6 py-5 border-b border-terra-100">
-          <div class="text-xl font-bold text-terra-700">PedroCha</div>
-          <div class="text-xs text-gray-500 mt-0.5">Operação Imobiliária · Vidigueira/Beja</div>
+      <aside class="hidden md:flex w-64 flex-col bg-lumo-700 text-cream">
+        <a href={url('/')} class="block px-6 py-6 border-b border-lumo-600">
+          <Logo markColor="#dbf090" textColor="#fffaf3" subColor="#dbf090" size={34} />
         </a>
         <nav class="flex-1 px-3 py-4 space-y-1">
           {nav.map((item) => (
@@ -43,15 +48,15 @@ const isActive = (href: string) => {
               href={url(item.href)}
               class={`block rounded-lg px-3 py-2 text-sm font-medium transition ${
                 isActive(item.href)
-                  ? 'bg-terra-100 text-terra-700'
-                  : 'text-gray-600 hover:bg-terra-50 hover:text-terra-700'
+                  ? 'bg-lime-300 text-lumo-800'
+                  : 'text-cream/70 hover:bg-lumo-600 hover:text-cream'
               }`}
             >
               {item.label}
             </a>
           ))}
         </nav>
-        <div class="px-6 py-4 border-t border-terra-100 text-[11px] text-gray-400">
+        <div class="px-6 py-4 border-t border-lumo-600 text-[11px] text-lime-300/70">
           MVP · demonstração para financiamento
         </div>
       </aside>
@@ -59,25 +64,25 @@ const isActive = (href: string) => {
       <!-- Main -->
       <div class="flex-1 flex flex-col min-w-0">
         <!-- Top bar (mobile nav) -->
-        <header class="md:hidden bg-white border-b border-terra-100 px-4 py-3 flex items-center justify-between">
-          <a href={url('/')} class="font-bold text-terra-700">PedroCha</a>
+        <header class="md:hidden bg-lumo-700 text-cream px-4 py-3 flex items-center justify-between gap-3">
+          <a href={url('/')}><Logo markColor="#dbf090" textColor="#fffaf3" subColor="#dbf090" size={26} /></a>
           <nav class="flex gap-2 overflow-x-auto text-xs">
             {nav.map((item) => (
-              <a href={url(item.href)} class={`whitespace-nowrap px-2 py-1 rounded ${isActive(item.href) ? 'bg-terra-100 text-terra-700' : 'text-gray-500'}`}>{item.label}</a>
+              <a href={url(item.href)} class={`whitespace-nowrap px-2 py-1 rounded ${isActive(item.href) ? 'bg-lime-300 text-lumo-800' : 'text-cream/70'}`}>{item.label}</a>
             ))}
           </nav>
         </header>
 
         <main class="flex-1 px-4 md:px-8 py-6 md:py-8 max-w-6xl w-full">
           <div class="mb-6">
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">{titulo}</h1>
-            {subtitulo && <p class="text-gray-500 mt-1">{subtitulo}</p>}
+            <h1 class="text-2xl md:text-3xl font-bold text-lumo-900">{titulo}</h1>
+            {subtitulo && <p class="text-lumo-600 mt-1">{subtitulo}</p>}
           </div>
           <slot />
         </main>
 
-        <footer class="px-4 md:px-8 py-4 text-[11px] text-gray-400 border-t border-terra-100">
-          PedroCha MVP — dados reais de anúncios públicos (imovirtual.com). Sem integração real de WhatsApp; faturas são documentos de demonstração.
+        <footer class="px-4 md:px-8 py-4 text-[11px] text-lumo-700/60 border-t border-lumo-100">
+          Lumo Properties — dados reais de anúncios públicos (imovirtual.com). Sem integração real de WhatsApp; faturas são documentos de demonstração.
         </footer>
       </div>
     </div>
