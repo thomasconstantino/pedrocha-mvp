@@ -1,0 +1,126 @@
+{
+  "descricao": "Projetos de reabilitação ativos e respetivos centros de custo. Cada fatura de obra é capturada automaticamente (demonstração) a partir do WhatsApp e arquivada no centro de custo do projeto.",
+  "projetos": [
+    {
+      "id": "PRJ-01",
+      "nome": "Reabilitação Moradia Cuba (centro da vila)",
+      "imovel_id": "imv-01",
+      "localidade": "Cuba",
+      "estado": "Obra em curso",
+      "orcamento_eur": 78000,
+      "faturas": [
+        {
+          "id": "FT-2026-0142",
+          "fornecedor": "Construções Alentejanas, Lda",
+          "nif": "503982147",
+          "descricao": "Demolição interior e remoção de entulho — fase 1",
+          "valor_eur": 4200,
+          "iva_eur": 252,
+          "total_eur": 4452,
+          "data": "2026-03-04",
+          "ficheiro_pdf": "/faturas/PRJ-01/FT-2026-0142.pdf",
+          "capturado_via": "WhatsApp",
+          "capturado_em": "2026-03-04T18:22:00Z"
+        },
+        {
+          "id": "FT-2026-0163",
+          "fornecedor": "Telhas e Cerâmica do Alentejo, Lda",
+          "nif": "509114882",
+          "descricao": "Reconstrução de cobertura — telha lusa e estrutura de madeira",
+          "valor_eur": 9850,
+          "iva_eur": 591,
+          "total_eur": 10441,
+          "data": "2026-03-21",
+          "ficheiro_pdf": "/faturas/PRJ-01/FT-2026-0163.pdf",
+          "capturado_via": "WhatsApp",
+          "capturado_em": "2026-03-21T11:09:00Z"
+        },
+        {
+          "id": "FT-2026-0188",
+          "fornecedor": "Leroy Merlin Portugal",
+          "nif": "503787287",
+          "descricao": "Materiais de construção — cimento, gesso cartonado, isolamento",
+          "valor_eur": 3120,
+          "iva_eur": 717.6,
+          "total_eur": 3837.6,
+          "data": "2026-04-02",
+          "ficheiro_pdf": "/faturas/PRJ-01/FT-2026-0188.pdf",
+          "capturado_via": "WhatsApp",
+          "capturado_em": "2026-04-02T16:40:00Z"
+        }
+      ]
+    },
+    {
+      "id": "PRJ-02",
+      "nome": "Recuperação Moradia Alvito",
+      "imovel_id": "imv-02",
+      "localidade": "Alvito",
+      "estado": "Obra em curso",
+      "orcamento_eur": 52000,
+      "faturas": [
+        {
+          "id": "FT-2026-0205",
+          "fornecedor": "Canalizações Beja, Lda",
+          "nif": "508663021",
+          "descricao": "Rede de águas e esgotos — substituição integral",
+          "valor_eur": 5400,
+          "iva_eur": 324,
+          "total_eur": 5724,
+          "data": "2026-04-15",
+          "ficheiro_pdf": "/faturas/PRJ-02/FT-2026-0205.pdf",
+          "capturado_via": "WhatsApp",
+          "capturado_em": "2026-04-15T09:51:00Z"
+        },
+        {
+          "id": "FT-2026-0231",
+          "fornecedor": "Eletricidade Vidigueira, Unip. Lda",
+          "nif": "514220987",
+          "descricao": "Instalação elétrica nova e quadro — certificação incluída",
+          "valor_eur": 4750,
+          "iva_eur": 285,
+          "total_eur": 5035,
+          "data": "2026-05-06",
+          "ficheiro_pdf": "/faturas/PRJ-02/FT-2026-0231.pdf",
+          "capturado_via": "WhatsApp",
+          "capturado_em": "2026-05-06T19:13:00Z"
+        }
+      ]
+    },
+    {
+      "id": "PRJ-03",
+      "nome": "Casa Tradicional Vila Nova da Baronia",
+      "imovel_id": "imv-03",
+      "localidade": "Vila Nova da Baronia",
+      "estado": "Obra em curso",
+      "orcamento_eur": 41000,
+      "faturas": [
+        {
+          "id": "FT-2026-0260",
+          "fornecedor": "Cimentos & Britas do Sul, Lda",
+          "nif": "505471330",
+          "descricao": "Reboco tradicional e regularização de paredes exteriores",
+          "valor_eur": 3680,
+          "iva_eur": 220.8,
+          "total_eur": 3900.8,
+          "data": "2026-05-19",
+          "ficheiro_pdf": "/faturas/PRJ-03/FT-2026-0260.pdf",
+          "capturado_via": "WhatsApp",
+          "capturado_em": "2026-05-19T14:02:00Z"
+        },
+        {
+          "id": "FT-2026-0284",
+          "fornecedor": "Tintas & Vernizes Baixo Alentejo",
+          "nif": "507992014",
+          "descricao": "Pintura interior e exterior — cal e tinta de silicato",
+          "valor_eur": 2950,
+          "iva_eur": 678.5,
+          "total_eur": 3628.5,
+          "data": "2026-06-10",
+          "ficheiro_pdf": "/faturas/PRJ-03/FT-2026-0284.pdf",
+          "capturado_via": "WhatsApp",
+          "capturado_em": "2026-06-10T17:35:00Z"
+        }
+      ]
+    }
+  ]
+}

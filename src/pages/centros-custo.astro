@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+import { projetos, gastoProjeto, percentagemCaptura, totalFaturas, faturasCapturadas } from '../lib/dados';
+import { eur2, dataPT } from '../lib/formato';
+import { url } from '../lib/url';
+---
+
+<Base titulo="Centros de Custo" subtitulo={`Faturas de obra capturadas por projeto · ${faturasCapturadas}/${totalFaturas} (${percentagemCaptura}%)`}>
+  <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6 text-sm text-green-800 flex items-center gap-3">
+    <span class="text-2xl">📲</span>
+    <div>
+      <strong>100% das faturas de obra capturadas.</strong> Cada fatura recebida por WhatsApp é arquivada automaticamente no centro de custo do projeto correspondente.
+      <span class="block text-xs text-green-700/80 mt-1">Nota: nesta demonstração a captura WhatsApp é simulada — os PDFs são documentos de exemplo.</span>
+    </div>
+  </div>
+
+  <div class="space-y-6">
+    {projetos.map((p) => {
+      const gasto = gastoProjeto(p);
+      const pct = Math.min(100, Math.round((gasto / p.orcamento_eur) * 100));
+      return (
+        <div class="bg-white rounded-xl border border-terra-100 overflow-hidden">
+          <div class="px-5 py-4 border-b border-terra-100 flex items-start justify-between flex-wrap gap-3">
+            <div>
+              <div class="text-xs text-gray-500">{p.id} · Imóvel {p.imovel_id} · {p.localidade}</div>
+              <h3 class="text-lg font-bold text-gray-900">{p.nome}</h3>
+              <span class="inline-block mt-1 px-2 py-0.5 rounded-full bg-terra-100 text-terra-700 text-xs">{p.estado}</span>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-gray-500">Gasto / Orçamento</div>
+              <div class="font-bold text-terra-700">{eur2(gasto)} <span class="text-gray-400 font-normal">/ {eur2(p.orcamento_eur)}</span></div>
+              <div class="mt-1 w-40 h-2 bg-terra-50 rounded-full overflow-hidden">
+                <div class="h-full bg-terra-500 rounded-full" style={`width:${pct}%`}></div>
+              </div>
+            </div>
+          </div>
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-xs uppercase text-gray-500 border-b border-terra-50">
+                <th class="px-5 py-2 font-medium">Fatura</th>
+                <th class="px-5 py-2 font-medium">Fornecedor</th>
+                <th class="px-5 py-2 font-medium">Descrição</th>
+                <th class="px-5 py-2 font-medium">Data</th>
+                <th class="px-5 py-2 font-medium text-right">Total</th>
+                <th class="px-5 py-2 font-medium">Captura</th>
+                <th class="px-5 py-2 font-medium">PDF</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-terra-50">
+              {p.faturas.map((f) => (
+                <tr class="hover:bg-terra-50/40">
+                  <td class="px-5 py-3 font-mono text-xs text-gray-600">{f.id}</td>
+                  <td class="px-5 py-3">
+                    <div class="text-gray-900">{f.fornecedor}</div>
+                    <div class="text-xs text-gray-400">NIF {f.nif}</div>
+                  </td>
+                  <td class="px-5 py-3 text-gray-700 max-w-xs">{f.descricao}</td>
+                  <td class="px-5 py-3 text-gray-600 whitespace-nowrap">{dataPT(f.data)}</td>
+                  <td class="px-5 py-3 text-right font-semibold text-terra-700 whitespace-nowrap">{eur2(f.total_eur)}</td>
+                  <td class="px-5 py-3">
+                    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-[11px]">
+                      <span>📲</span> via {f.capturado_via}
+                    </span>
+                  </td>
+                  <td class="px-5 py-3">
+                    <a href={url(f.ficheiro_pdf)} target="_blank" rel="noopener" class="text-azul-700 hover:underline text-xs">abrir PDF →</a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    })}
+  </div>
+</Base>

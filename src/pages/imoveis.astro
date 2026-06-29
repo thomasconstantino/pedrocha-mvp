@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import { avaliacoes, totalAtivos, totalImoveis } from '../lib/dados';
+import { eur, m2 } from '../lib/formato';
+---
+
+<Base titulo="Imóveis" subtitulo={`${totalAtivos} / ${totalImoveis} imóveis ativos · região Vidigueira / Beja`}>
+  <div class="mb-4 text-sm text-gray-600">
+    Todos os imóveis ativos da operação, carregados de anúncios reais. Os assinalados com
+    <span class="inline-block align-middle mx-1 px-2 py-0.5 rounded-full bg-azul-700 text-white text-xs">Alerta</span>
+    cumprem os critérios de aquisição.
+  </div>
+
+  <div class="overflow-x-auto bg-white rounded-xl border border-terra-100">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-xs uppercase text-gray-500 border-b border-terra-100">
+          <th class="px-4 py-3 font-medium">Imóvel</th>
+          <th class="px-4 py-3 font-medium">Concelho</th>
+          <th class="px-4 py-3 font-medium">Tipo</th>
+          <th class="px-4 py-3 font-medium text-right">Área</th>
+          <th class="px-4 py-3 font-medium text-right">Preço</th>
+          <th class="px-4 py-3 font-medium text-right">€/m²</th>
+          <th class="px-4 py-3 font-medium">Estado</th>
+          <th class="px-4 py-3 font-medium">Fonte</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-terra-50">
+        {avaliacoes.map((a) => (
+          <tr class="hover:bg-terra-50/50" data-imovel={a.imovel.id}>
+            <td class="px-4 py-3">
+              <div class="font-medium text-gray-900 flex items-center gap-2">
+                <span>{a.imovel.titulo}</span>
+                {a.alerta && <span class="shrink-0 px-2 py-0.5 rounded-full bg-azul-700 text-white text-[10px]">Alerta</span>}
+              </div>
+              <div class="text-xs text-gray-500">{a.imovel.localidade}</div>
+            </td>
+            <td class="px-4 py-3 text-gray-700">{a.imovel.concelho}</td>
+            <td class="px-4 py-3 text-gray-700">{a.imovel.tipologia}</td>
+            <td class="px-4 py-3 text-right text-gray-700">{m2(a.imovel.area_m2)}</td>
+            <td class="px-4 py-3 text-right font-semibold text-terra-700">{eur(a.imovel.preco_eur)}</td>
+            <td class="px-4 py-3 text-right text-gray-700">{eur(a.imovel.preco_por_m2)}</td>
+            <td class="px-4 py-3">
+              <span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs capitalize">{a.imovel.estado}</span>
+            </td>
+            <td class="px-4 py-3">
+              <a href={a.imovel.url} target="_blank" rel="noopener" class="text-azul-700 hover:underline text-xs">ver anúncio →</a>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</Base>

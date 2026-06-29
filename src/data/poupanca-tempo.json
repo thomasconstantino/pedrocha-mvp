@@ -1,0 +1,31 @@
+{
+  "titulo": "Tempo operacional devolvido ao Pedro",
+  "descricao": "Estimativa itemizada das tarefas manuais semanais agora automatizadas ou centralizadas pelo dashboard. Total calculado a partir dos itens — não é um valor fixo.",
+  "atualizado": "2026-06-29",
+  "itens": [
+    {
+      "tarefa": "Monitorização manual de portais imobiliários",
+      "antes": "Pesquisa diária no Idealista, Imovirtual e Casa SAPO à procura de oportunidades",
+      "agora": "Imóveis ativos centralizados e alertas de aquisição automáticos",
+      "horas_semana": 2.0
+    },
+    {
+      "tarefa": "Captura e arquivo de faturas de obra",
+      "antes": "Faturas recebidas por WhatsApp, guardadas à mão por centro de custo",
+      "agora": "Faturas capturadas automaticamente no centro de custo de cada projeto",
+      "horas_semana": 1.5
+    },
+    {
+      "tarefa": "Compilação do estado do portfólio",
+      "antes": "Folha de cálculo atualizada manualmente para saber o estado de cada imóvel",
+      "agora": "Estado do portfólio visível em tempo real no dashboard",
+      "horas_semana": 1.0
+    },
+    {
+      "tarefa": "Triagem de oportunidades de aquisição",
+      "antes": "Avaliação manual de cada anúncio face aos critérios da operação",
+      "agora": "Motor de alertas avalia cada imóvel face aos critérios configurados",
+      "horas_semana": 0.75
+    }
+  ]
+}

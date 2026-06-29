@@ -1,0 +1,24 @@
+{
+  "nome": "Critérios de Aquisição — Operação Vidigueira/Beja",
+  "descricao": "Critérios operacionais visíveis usados para sinalizar imóveis com potencial de aquisição. Filtros simples e auditáveis — não incluem o modelo de avaliação proprietário da operação.",
+  "atualizado": "2026-06-29",
+  "regras": {
+    "preco_max_eur": 150000,
+    "preco_por_m2_max_eur": 950,
+    "area_min_m2": 70,
+    "concelhos_alvo": [
+      "Vidigueira",
+      "Cuba",
+      "Alvito",
+      "Beja",
+      "Ferreira do Alentejo"
+    ],
+    "tipos_alvo": [
+      "Moradia",
+      "Quinta",
+      "Rústico",
+      "Terreno"
+    ]
+  },
+  "notas": "Um imóvel gera ALERTA DE AQUISIÇÃO quando cumpre todos os critérios acima. Os critérios são deliberadamente genéricos para esta demonstração."
+}

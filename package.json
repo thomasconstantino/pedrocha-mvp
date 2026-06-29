@@ -1,0 +1,26 @@
+{
+  "name": "pedrocha-mvp",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun --bun astro dev",
+    "start": "bun --bun astro dev",
+    "build": "bun --bun astro build",
+    "preview": "bun --bun astro preview",
+    "astro": "bun --bun astro",
+    "gen:faturas": "bun run scripts/gerar-faturas.ts",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "astro": "^5.1.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/tailwind": "^5.1.4",
+    "@tailwindcss/typography": "^0.5.15",
+    "pdf-lib": "^1.17.1",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  }
+}

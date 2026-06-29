@@ -1,0 +1,85 @@
+---
+interface Props {
+  titulo: string;
+  subtitulo?: string;
+}
+import { url } from '../lib/url';
+const { titulo, subtitulo } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const nav = [
+  { href: '/', label: 'Visão Geral' },
+  { href: '/imoveis', label: 'Imóveis' },
+  { href: '/alertas', label: 'Alertas' },
+  { href: '/centros-custo', label: 'Centros de Custo' },
+  { href: '/criterios', label: 'Critérios' },
+];
+const isActive = (href: string) => {
+  const target = url(href).replace(/\/$/, '') || '/';
+  return href === '/' ? path === target : path.startsWith(target);
+};
+---
+
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+    <title>{titulo} · PedroCha</title>
+    <meta name="description" content="Dashboard operacional da operação imobiliária PedroCha — Vidigueira / Beja." />
+  </head>
+  <body class="min-h-screen bg-terra-50 text-gray-900 font-sans antialiased">
+    <div class="flex min-h-screen">
+      <!-- Sidebar -->
+      <aside class="hidden md:flex w-64 flex-col bg-white border-r border-terra-100">
+        <a href={url('/')} class="block px-6 py-5 border-b border-terra-100">
+          <div class="text-xl font-bold text-terra-700">PedroCha</div>
+          <div class="text-xs text-gray-500 mt-0.5">Operação Imobiliária · Vidigueira/Beja</div>
+        </a>
+        <nav class="flex-1 px-3 py-4 space-y-1">
+          {nav.map((item) => (
+            <a
+              href={url(item.href)}
+              class={`block rounded-lg px-3 py-2 text-sm font-medium transition ${
+                isActive(item.href)
+                  ? 'bg-terra-100 text-terra-700'
+                  : 'text-gray-600 hover:bg-terra-50 hover:text-terra-700'
+              }`}
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+        <div class="px-6 py-4 border-t border-terra-100 text-[11px] text-gray-400">
+          MVP · demonstração para financiamento
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <div class="flex-1 flex flex-col min-w-0">
+        <!-- Top bar (mobile nav) -->
+        <header class="md:hidden bg-white border-b border-terra-100 px-4 py-3 flex items-center justify-between">
+          <a href={url('/')} class="font-bold text-terra-700">PedroCha</a>
+          <nav class="flex gap-2 overflow-x-auto text-xs">
+            {nav.map((item) => (
+              <a href={url(item.href)} class={`whitespace-nowrap px-2 py-1 rounded ${isActive(item.href) ? 'bg-terra-100 text-terra-700' : 'text-gray-500'}`}>{item.label}</a>
+            ))}
+          </nav>
+        </header>
+
+        <main class="flex-1 px-4 md:px-8 py-6 md:py-8 max-w-6xl w-full">
+          <div class="mb-6">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900">{titulo}</h1>
+            {subtitulo && <p class="text-gray-500 mt-1">{subtitulo}</p>}
+          </div>
+          <slot />
+        </main>
+
+        <footer class="px-4 md:px-8 py-4 text-[11px] text-gray-400 border-t border-terra-100">
+          PedroCha MVP — dados reais de anúncios públicos (imovirtual.com). Sem integração real de WhatsApp; faturas são documentos de demonstração.
+        </footer>
+      </div>
+    </div>
+  </body>
+</html>
